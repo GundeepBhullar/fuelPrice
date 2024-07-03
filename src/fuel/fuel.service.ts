@@ -1,26 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFuelDto } from './dto/create-fuel.dto';
 import { UpdateFuelDto } from './dto/update-fuel.dto';
+import { Repository } from 'typeorm';
+import { Fuel } from './entities/fuel.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class FuelService {
+
+  constructor(@InjectRepository(Fuel) private readonly fuelRepository : Repository<Fuel>) {
+
+  }
   create(createFuelDto: CreateFuelDto) {
-    return 'This action adds a new fuel';
+    let fuel : Fuel = new Fuel();
+    fuel.state = createFuelDto.state;
+    fuel.petrolPrice = createFuelDto.petrolPrice;
+    fuel.dieselPrice = createFuelDto.dieselPrice;
+    return this.fuelRepository.save(fuel);
   }
 
-  findAll() {
-    return `This action returns all fuel`;
+  findAll() : Promise<Fuel[]> {
+    return this.fuelRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} fuel`;
+  findOne(state : string) {
+    return this.fuelRepository.findOne({where: {state}});
   }
 
-  update(id: number, updateFuelDto: UpdateFuelDto) {
-    return `This action updates a #${id} fuel`;
+  update(state : string, updateFuelDto: UpdateFuelDto) {
+    let fuel : Fuel = new Fuel();
+    fuel.state = updateFuelDto.state;
+    fuel.petrolPrice = updateFuelDto.petrolPrice;
+    fuel.dieselPrice = updateFuelDto.dieselPrice;
+    fuel.state = state; 
+    return this.fuelRepository.save(fuel);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} fuel`;
+  remove(id : number) {
+    return this.fuelRepository.delete(id);
   }
 }

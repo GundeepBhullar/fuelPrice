@@ -17,18 +17,18 @@ export class FuelController {
     return this.fuelService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.fuelService.findOne(+id);
+  @Get(':state')
+  findOne(@Param('state') state: string) {
+    return this.fuelService.findOne(state);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFuelDto: UpdateFuelDto) {
-    return this.fuelService.update(+id, updateFuelDto);
+  @Patch(':state')
+  update(@Param('state') state: string, @Body() updateFuelDto: UpdateFuelDto) {
+    return this.fuelService.update(state, updateFuelDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.fuelService.remove(+id);
   }
 }
