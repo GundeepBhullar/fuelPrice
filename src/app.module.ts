@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-
+import { ScheduleModule } from '@nestjs/schedule';
 import { FuelModule } from './fuel/fuel.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Fuel } from './fuel/entities/fuel.entity';
+import { FuelService } from './fuel/fuel.service';
+import { ScrapingService } from './scraping/scraping.service';
+import { ScrapingModule } from './scraping/scraping.module';
+import { FuelPriceUpdateScheduler } from './fuel/fuel.scheduler';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -18,9 +22,16 @@ import { Fuel } from './fuel/entities/fuel.entity';
     synchronize: true,
     logging: true,
     
-  }),FuelModule],
+  }),
+  ScheduleModule.forRoot(),
+  FuelModule,
+  ScrapingModule
+],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    FuelService,
+    FuelPriceUpdateScheduler
+  ],
   
 })
 export class AppModule {}
